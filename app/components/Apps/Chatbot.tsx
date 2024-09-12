@@ -28,7 +28,6 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import gfm from "remark-gfm";
 import mermaid from "mermaid";
-import { ReactMarkdownProps } from 'react-markdown/lib/complex-types'; // Import this type if needed
 import { Components } from "react-markdown"; // Correct way to import types for custom components
 
 // Ubuntu theme colors
