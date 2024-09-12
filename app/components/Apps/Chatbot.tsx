@@ -349,9 +349,6 @@ const MermaidDiagram: React.FC<{ code: string }> = ({ code }) => {
 };
 
 
-const markdownComponents: Components = {
-    code: CodeBlock,
-  };
   
 // Custom renderer for code blocks
 const CodeBlock: Components['code'] = ({ inline, className, children, ...props }) => {
@@ -371,6 +368,11 @@ const CodeBlock: Components['code'] = ({ inline, className, children, ...props }
         {children}
       </code>
     );
+  };
+
+  
+const markdownComponents: Components = {
+    code: CodeBlock,
   };
 // Slash commands
 const slashCommands = [
