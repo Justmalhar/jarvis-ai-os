@@ -29,7 +29,7 @@ import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import gfm from "remark-gfm";
 import mermaid from "mermaid";
 import { ReactMarkdownProps } from 'react-markdown/lib/complex-types'; // Import this type if needed
-import { Components } from "react-markdown";
+import { Components } from "react-markdown"; // Correct way to import types for custom components
 
 // Ubuntu theme colors
 const ubuntuTheme = {
@@ -350,11 +350,11 @@ const MermaidDiagram: React.FC<{ code: string }> = ({ code }) => {
 
 
 const markdownComponents: Components = {
-    code: CodeBlock as ReactMarkdownProps['components']['code'],
+    code: CodeBlock,
   };
   
 // Custom renderer for code blocks
-const CodeBlock: React.FC<ReactMarkdownProps['components']['code']> = ({ inline, className, children }) => {
+const CodeBlock: Components['code'] = ({ inline, className, children, ...props }) => {
     const match = /language-(\w+)/.exec(className || "");
     const language = match && match[1];
   
@@ -363,15 +363,11 @@ const CodeBlock: React.FC<ReactMarkdownProps['components']['code']> = ({ inline,
     }
   
     return !inline && language ? (
-      <SyntaxHighlighter
-        style={tomorrow}
-        language={language}
-        PreTag="div"
-      >
+      <SyntaxHighlighter style={tomorrow} language={language} PreTag="div" {...props}>
         {String(children).replace(/\n$/, "")}
       </SyntaxHighlighter>
     ) : (
-      <code className={className}>
+      <code className={className} {...props}>
         {children}
       </code>
     );
@@ -638,12 +634,12 @@ export default function Chatbot() {
               boxShadow="md" // Added shadow for depth
               overflow={"none"}
             >
-              <ReactMarkdown
-                remarkPlugins={[gfm]}
-                components={markdownComponents}
-                >
-                {message.content}
-              </ReactMarkdown>
+             <ReactMarkdown
+  remarkPlugins={[gfm]}
+  components={markdownComponents}
+>
+  {message.content}
+</ReactMarkdown>
             </Box>
           </Box>
         ))}
