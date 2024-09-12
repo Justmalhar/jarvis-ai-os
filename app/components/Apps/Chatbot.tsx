@@ -634,12 +634,12 @@ export default function Chatbot() {
               boxShadow="md" // Added shadow for depth
               overflow={"none"}
             >
-             <ReactMarkdown
-  remarkPlugins={[gfm]}
-  components={markdownComponents}
->
-  {message.content}
-</ReactMarkdown>
+              <ReactMarkdown
+                remarkPlugins={[gfm]}
+                components={markdownComponents}
+                >
+                {message.content}
+              </ReactMarkdown>
             </Box>
           </Box>
         ))}
