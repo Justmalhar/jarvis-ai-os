@@ -22,6 +22,7 @@ const FileExplorer: React.FC = () => {
   const handleItemClick = (item: File) => {
     if (item.type === 'folder') {
       setCurrentPath(`${currentPath}${item.name}/`);
+      
       // In a real application, you would fetch the contents of the new folder here
     } else {
       console.log(`Opening file: ${item.name}`);

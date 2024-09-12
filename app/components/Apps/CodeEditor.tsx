@@ -9,7 +9,7 @@ import { githubLight } from '@uiw/codemirror-theme-github'
 export default function CodeEditor() {
   const [code, setCode] = useState('// Start coding here')
 
-  const onChange = (value, viewUpdate) => {
+  const onChange = (value) => {
     setCode(value)
   }
 

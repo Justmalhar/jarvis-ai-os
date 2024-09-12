@@ -315,7 +315,6 @@ const MermaidDiagram: React.FC<{ code: string }> = ({ code }) => {
     }, [code]);
   
     const downloadPNG = () => {
-        debugger;
       if (ref.current) {
         const svg = ref.current.querySelector('svg');
         if (svg) {
@@ -347,11 +346,10 @@ const MermaidDiagram: React.FC<{ code: string }> = ({ code }) => {
 
 // Custom renderer for code blocks
 const CodeBlock: React.FC<{
-  node?: any;
   inline?: boolean;
   className?: string;
   children: React.ReactNode;
-}> = ({ node, inline, className, children, ...props }) => {
+}> = ({ inline, className, children, ...props }) => {
   const match = /language-(\w+)/.exec(className || "");
   const language = match && match[1];
 
@@ -419,7 +417,7 @@ export default function Chatbot() {
       const reader = response.body?.getReader();
       if (!reader) throw new Error("No reader available");
 
-      let aiResponse = { role: "assistant", content: "" };
+      const aiResponse = { role: "assistant", content: "" };
       setMessages((prevMessages) => [...prevMessages, aiResponse]);
 
       while (true) {
