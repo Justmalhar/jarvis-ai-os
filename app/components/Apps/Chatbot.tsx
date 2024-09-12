@@ -389,7 +389,9 @@ export default function Chatbot() {
   );
   const [input, setInput] = useState("");
   const [model, setModel] = useState("gpt-4o");
-  const [slashCommandSuggestions, setSlashCommandSuggestions] = useState<{ name: string; description: string }[]>([]);
+  const [slashCommandSuggestions, setSlashCommandSuggestions] = useState<
+    { name: string; description: string }[]
+  >([]);
   const [isStreaming, setIsStreaming] = useState(false);
 
   const toast = useToast();
@@ -403,7 +405,7 @@ export default function Chatbot() {
     setIsStreaming(true);
 
     try {
-      const response = await fetch("/api/openai", {
+      const response: Response = await fetch("/api/openai", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -418,7 +420,8 @@ export default function Chatbot() {
         throw new Error("Failed to communicate with AI");
       }
 
-      const reader = response.body?.getReader();
+      const reader: ReadableStreamDefaultReader | undefined =
+        response.body?.getReader();
       if (!reader) throw new Error("No reader available");
 
       const aiResponse = { role: "assistant", content: "" };
@@ -465,7 +468,7 @@ export default function Chatbot() {
         status: "error",
         duration: 3000,
         isClosable: true,
-      });
+      } as const); // Explicit typing      
     } finally {
       setIsStreaming(false);
     }
@@ -485,7 +488,7 @@ export default function Chatbot() {
     }
   };
 
-  const handleSlashCommand = (command) => {
+  const handleSlashCommand = (command: string) => {
     switch (command) {
       case "/clear":
         setMessages([]);
@@ -651,13 +654,13 @@ export default function Chatbot() {
             aria-label="Attach file"
             icon={<AttachmentIcon />}
             mr={2}
-            onClick={() => console.log("Attach file")}
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => console.log("Attach file")}
           />
           <IconButton
             aria-label="Voice input"
             icon={<FaMicrophone />}
             mr={2}
-            onClick={() => console.log("Voice input")}
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => console.log("Voice input")}
           />
           <Popover
             isOpen={slashCommandSuggestions.length > 0}
@@ -669,7 +672,7 @@ export default function Chatbot() {
                 value={input}
                 onChange={handleInputChange}
                 placeholder="Type your message or use / for commands..."
-                onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+                onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && sendMessage()}
                 bg={ubuntuTheme.white}
                 size="lg" // Larger input
                 borderRadius="md"
