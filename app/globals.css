@@ -14,6 +14,9 @@ body {
   font-family: 'Ubuntu', sans-serif;
   background-color: #2C001E;
   color: #FFFFFF;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 .ubuntu-window {
