@@ -157,6 +157,32 @@ const appMenuItems = {
 export default function Desktop() {
   const [openApps, setOpenApps] = useState<AppWindow[]>([]);
   const [maximized, setMaximized] = useState<boolean>(false);
+  const gradientWallpapers = [
+    "linear-gradient(to right, #ff7e5f, #feb47b)", // Example gradients
+    "linear-gradient(to right, #6a11cb, #2575fc)",
+    "linear-gradient(to right, #00c9ff, #92fe9d)",
+    "linear-gradient(to right, #fc466b, #3f5efb)",
+  ];
+
+  const [currentWallpaper, setCurrentWallpaper] = useState<string>(
+    gradientWallpapers[0]
+  );
+  const [contextMenuVisible, setContextMenuVisible] = useState<boolean>(false);
+  const [contextMenuPosition, setContextMenuPosition] = useState({
+    x: 0,
+    y: 0,
+  });
+
+  const handleRightClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setContextMenuPosition({ x: e.pageX, y: e.pageY });
+    setContextMenuVisible(true);
+  };
+
+  const changeWallpaper = (index: number) => {
+    setCurrentWallpaper(gradientWallpapers[index]);
+    setContextMenuVisible(false);
+  };
 
   const launchApp = (appName: string) => {
     let appComponent: React.ReactNode;
@@ -196,7 +222,27 @@ export default function Desktop() {
   };
 
   return (
-    <Box className="relative h-full bg-[#2C001E] p-4 ubuntu-scrollbar">
+    <Box
+      className="relative h-full p-4 ubuntu-scrollbar"
+      style={{ background: currentWallpaper }}
+      onContextMenu={handleRightClick}
+    >
+      {contextMenuVisible && (
+        <Box
+          className="absolute bg-gray-800 text-white rounded shadow-lg z-50"
+          style={{ top: contextMenuPosition.y, left: contextMenuPosition.x }}
+        >
+          {gradientWallpapers.map((gradient, index) => (
+            <Box
+              key={index}
+              className="cursor-pointer p-2 hover:bg-gray-700"
+              onClick={() => changeWallpaper(index)}
+            >
+              Wallpaper {index + 1}
+            </Box>
+          ))}
+        </Box>
+      )}
       <div className="grid grid-cols-6 gap-4">
         <DesktopIcon
           icon={faTerminal}
@@ -248,7 +294,7 @@ export default function Desktop() {
         >
           <Flex direction="column" h="full">
             <div className="ubuntu-window-header bg-gray-800 text-white p-2 flex justify-between items-center">
-              <span>{app.name}</span>
+              <strong>{app.name}</strong>
               <div className="flex">
                 <button
                   className="text-white hover:text-gray-300"

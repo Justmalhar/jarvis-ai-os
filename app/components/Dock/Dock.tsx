@@ -49,7 +49,7 @@ const Dock = ({ launchApp }) => {
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed bottom-2 mx-auto w-[100%] bg-[#2C001E]"
+      className="fixed bottom-2 mx-auto"
     >
       <Box
         className="flex mx-auto items-center max-w-[60vw] mb-2 justify-center bg-ubuntu-purple bg-opacity-80 p-2 rounded-full shadow-lg"
