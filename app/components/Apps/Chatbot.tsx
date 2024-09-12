@@ -28,6 +28,8 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import gfm from "remark-gfm";
 import mermaid from "mermaid";
+import { ReactMarkdownProps } from 'react-markdown/lib/complex-types'; // Import this type if needed
+import { Components } from "react-markdown";
 
 // Ubuntu theme colors
 const ubuntuTheme = {
@@ -346,34 +348,34 @@ const MermaidDiagram: React.FC<{ code: string }> = ({ code }) => {
   );
 };
 
+
+const markdownComponents: Components = {
+    code: CodeBlock as ReactMarkdownProps['components']['code'],
+  };
+  
 // Custom renderer for code blocks
-const CodeBlock: React.FC<{
-  inline?: boolean;
-  className?: string;
-  children: React.ReactNode;
-}> = ({ inline, className, children, ...props }) => {
-  const match = /language-(\w+)/.exec(className || "");
-  const language = match && match[1];
-
-  if (language === "mermaid") {
-    return <MermaidDiagram code={String(children).replace(/\n$/, "")} />;
-  }
-
-  return !inline && language ? (
-    <SyntaxHighlighter
-      style={tomorrow}
-      language={language}
-      PreTag="div"
-      {...props}
-    >
-      {String(children).replace(/\n$/, "")}
-    </SyntaxHighlighter>
-  ) : (
-    <code className={className} {...props}>
-      {children}
-    </code>
-  );
-};
+const CodeBlock: React.FC<ReactMarkdownProps['components']['code']> = ({ inline, className, children }) => {
+    const match = /language-(\w+)/.exec(className || "");
+    const language = match && match[1];
+  
+    if (language === "mermaid") {
+      return <MermaidDiagram code={String(children).replace(/\n$/, "")} />;
+    }
+  
+    return !inline && language ? (
+      <SyntaxHighlighter
+        style={tomorrow}
+        language={language}
+        PreTag="div"
+      >
+        {String(children).replace(/\n$/, "")}
+      </SyntaxHighlighter>
+    ) : (
+      <code className={className}>
+        {children}
+      </code>
+    );
+  };
 // Slash commands
 const slashCommands = [
   { name: "/help", description: "Show available commands" },
@@ -638,10 +640,8 @@ export default function Chatbot() {
             >
               <ReactMarkdown
                 remarkPlugins={[gfm]}
-                components={{
-                  code: CodeBlock,
-                }}
-              >
+                components={markdownComponents}
+                >
                 {message.content}
               </ReactMarkdown>
             </Box>
