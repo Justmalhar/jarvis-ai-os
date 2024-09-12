@@ -9,8 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        'ubuntu-orange': '#E95420',
+        'ubuntu-purple': '#772953',
+        'ubuntu-gray': '#333333',
+        'ubuntu-light-gray': '#AEA79F',
+      },
+      fontFamily: {
+        ubuntu: ['Ubuntu', 'sans-serif'],
+      },
+      boxShadow: {
+        'ubuntu': '0 2px 4px 0 rgba(0, 0, 0, 0.1)',
       },
     },
   },
