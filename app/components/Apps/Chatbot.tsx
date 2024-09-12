@@ -389,7 +389,7 @@ export default function Chatbot() {
   );
   const [input, setInput] = useState("");
   const [model, setModel] = useState("gpt-4o");
-  const [slashCommandSuggestions, setSlashCommandSuggestions] = useState([]);
+  const [slashCommandSuggestions, setSlashCommandSuggestions] = useState<{ name: string; description: string }[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
 
   const toast = useToast();

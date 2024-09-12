@@ -23,10 +23,10 @@ const DockIcon = ({ icon, label, onClick }) => {
         className="mx-1"
       >
         <Box
-            className="p-2 md:p-3 rounded-full cursor-pointer bg-white bg-opacity-10 text-white hover:bg-ubuntu-orange transition-all duration-200 w-[50px] md:w-[65px] mx-auto text-center"
+            className="p-2 md:p-3 rounded-full cursor-pointer bg-white bg-opacity-10 text-white hover:bg-ubuntu-orange transition-all duration-200 w-[50px] sm:w-[40px] md:w-[65px] mx-auto text-center"
             onClick={onClick}
         >
-          <FontAwesomeIcon icon={icon} size="lg" className='p-2' />
+          <FontAwesomeIcon icon={icon} size="lg" className='p-2 sm:w-[40px]' />
         </Box>
       </motion.div>
     </Tooltip>
@@ -49,16 +49,17 @@ const Dock = ({ launchApp }) => {
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="absolute bottom-2 mx-auto w-[100%]"
+      className="absolute left-0 bottom-2 mx-auto w-[100%] sm:w-[100vw]"
     >
-      <Box
-        className="flex mx-auto items-center mb-2 justify-center bg-ubuntu-purple bg-opacity-80 p-2 rounded-full shadow-lg sm:max-w-[80vw] md:max-w-[40vw] lg:max-w-[30vw] xl:max-w-[25vw]"
-        style={{
-            maxWidth: "60vw", // For larger screens
-            padding: "0.5rem 1rem", // Padding for all screens
-            width: "90vw", // Dock takes up more space on mobile screens
-        }}
-        >
+     <Box
+  className="flex mx-auto items-center mb-2 justify-center bg-ubuntu-purple bg-opacity-80 p-2 rounded-full shadow-lg"
+  style={{
+    width: "100%", // Ensures the dock takes the full width of the container without overflow
+    maxWidth: "95vw", // Ensures it doesn't overflow on larger screens
+    padding: "0.5rem 1rem", // Padding adjusted to prevent overflow
+    boxSizing: "border-box", // Ensures padding is included in width calculations
+  }}
+>
         {dockItems.map((item, index) => (
           <DockIcon key={index} icon={item.icon} label={item.label} onClick={item.onClick}/>
         ))}
