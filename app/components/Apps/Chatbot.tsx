@@ -296,53 +296,55 @@ const ubuntuMarkdownStyles = `
 
 // Mermaid rendering component (unchanged)
 const MermaidDiagram: React.FC<{ code: string }> = ({ code }) => {
-    const ref = useRef<HTMLDivElement>(null);
-  
-    useEffect(() => {
-      mermaid.initialize({
-        startOnLoad: true,
-        theme: "default",
-        securityLevel: "loose",
-      });
-  
-      if (ref.current) {
-        mermaid.render("mermaid-diagram", code).then((result) => {
-          if (ref.current) {
-            ref.current.innerHTML = result.svg;
-          }
-        });
-      }
-    }, [code]);
-  
-    const downloadPNG = () => {
-      if (ref.current) {
-        const svg = ref.current.querySelector('svg');
-        if (svg) {
-          const svgData = new XMLSerializer().serializeToString(svg);
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          const img = new Image();
-          img.onload = () => {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx?.drawImage(img, 0, 0);
-            const pngFile = canvas.toDataURL('image/png');
-            const downloadLink = document.createElement('a');
-            downloadLink.download = 'mermaid-diagram.png';
-            downloadLink.href = pngFile;
-            downloadLink.click();
-          };
-          img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "default",
+      securityLevel: "loose",
+    });
+
+    if (ref.current) {
+      mermaid.render("mermaid-diagram", code).then((result) => {
+        if (ref.current) {
+          ref.current.innerHTML = result.svg;
         }
+      });
+    }
+  }, [code]);
+
+  const downloadPNG = () => {
+    if (ref.current) {
+      const svg = ref.current.querySelector("svg");
+      if (svg) {
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx?.drawImage(img, 0, 0);
+          const pngFile = canvas.toDataURL("image/png");
+          const downloadLink = document.createElement("a");
+          downloadLink.download = "mermaid-diagram.png";
+          downloadLink.href = pngFile;
+          downloadLink.click();
+        };
+        img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
       }
-    };
-  
-    return (
-      <div ref={ref} className="mermaid-diagram">
-        <button onClick={downloadPNG} className="download-btn">Download PNG</button>
-      </div>
-    );
+    }
   };
+
+  return (
+    <div ref={ref} className="mermaid-diagram">
+      <button onClick={downloadPNG} className="download-btn">
+        Download PNG
+      </button>
+    </div>
+  );
+};
 
 // Custom renderer for code blocks
 const CodeBlock: React.FC<{
@@ -382,7 +384,9 @@ const slashCommands = [
 ];
 
 export default function Chatbot() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<{ role: string; content: string }[]>(
+    []
+  );
   const [input, setInput] = useState("");
   const [model, setModel] = useState("gpt-4o");
   const [slashCommandSuggestions, setSlashCommandSuggestions] = useState([]);
@@ -593,50 +597,54 @@ export default function Chatbot() {
         </Menu>
       </HStack>
 
-<VStack 
-  flex={1} 
-  overflowY="auto" 
-  overflowX={"hidden"}
-  spacing={8} // Increased spacing between messages
-  p={6} // Increased padding
-  align="stretch" 
-  bg={ubuntuTheme.lightGrey} // Light background for better readability
-  className="ubuntu-scrollbar"
->
-  {messages.map((message, index) => (
-    <Box 
-      key={index} 
-      maxWidth="80%" // Increased max width for better readability
-      alignSelf={message.role === 'user' ? 'flex-end' : 'flex-start'}
-    >
-      <Text 
-        fontWeight="bold" 
-        color={message.role === 'user' ? ubuntuTheme.orange : ubuntuTheme.purple}
-        mb={2} // Increased margin bottom
-        fontSize="lg" // Larger font size for role label
+      <VStack
+        flex={1}
+        overflowY="auto"
+        overflowX={"hidden"}
+        spacing={8} // Increased spacing between messages
+        p={6} // Increased padding
+        align="stretch"
+        bg={ubuntuTheme.lightGrey} // Light background for better readability
+        className="ubuntu-scrollbar"
       >
-        {message.role === 'user' ? 'You:' : 'AI:'}
-      </Text>
-      <Box
-        bg={ubuntuTheme.white}
-        color={ubuntuTheme.coolGrey}
-        p={4} // Increased padding
-        borderRadius="md"
-        boxShadow="md" // Added shadow for depth
-        overflow={"none"}
-      >
-        <ReactMarkdown
-          remarkPlugins={[gfm]}
-          components={{
-            code: CodeBlock,
-          }}
-        >
-          {message.content}
-        </ReactMarkdown>
-      </Box>
-    </Box>
-  ))}
-</VStack>
+        {messages.map((message, index) => (
+          <Box
+            key={index}
+            maxWidth="80%" // Increased max width for better readability
+            alignSelf={message.role === "user" ? "flex-end" : "flex-start"}
+          >
+            <Text
+              fontWeight="bold"
+              color={
+                message.role === "user"
+                  ? ubuntuTheme.orange
+                  : ubuntuTheme.purple
+              }
+              mb={2} // Increased margin bottom
+              fontSize="lg" // Larger font size for role label
+            >
+              {message.role === "user" ? "You:" : "AI:"}
+            </Text>
+            <Box
+              bg={ubuntuTheme.white}
+              color={ubuntuTheme.coolGrey}
+              p={4} // Increased padding
+              borderRadius="md"
+              boxShadow="md" // Added shadow for depth
+              overflow={"none"}
+            >
+              <ReactMarkdown
+                remarkPlugins={[gfm]}
+                components={{
+                  code: CodeBlock,
+                }}
+              >
+                {message.content}
+              </ReactMarkdown>
+            </Box>
+          </Box>
+        ))}
+      </VStack>
       <Box p={4} bg={ubuntuTheme.coolGrey}>
         <Flex>
           <IconButton
@@ -656,16 +664,16 @@ export default function Chatbot() {
             placement="top-start"
           >
             <PopoverTrigger>
-             <Input
-      flex={1}
-      value={input}
-      onChange={handleInputChange}
-      placeholder="Type your message or use / for commands..."
-      onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-      bg={ubuntuTheme.white}
-      size="lg" // Larger input
-      borderRadius="md"
-    />
+              <Input
+                flex={1}
+                value={input}
+                onChange={handleInputChange}
+                placeholder="Type your message or use / for commands..."
+                onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+                bg={ubuntuTheme.white}
+                size="lg" // Larger input
+                borderRadius="md"
+              />
             </PopoverTrigger>
             <PopoverContent>
               <PopoverBody>
@@ -683,16 +691,16 @@ export default function Chatbot() {
               </PopoverBody>
             </PopoverContent>
           </Popover>
-          <Button 
-      onClick={sendMessage} 
-      ml={4} // Increased margin
-      colorScheme="orange"
-      isLoading={isStreaming}
-      loadingText="Sending..."
-      size="lg" // Larger button
-    >
-      Send
-    </Button>
+          <Button
+            onClick={sendMessage}
+            ml={4} // Increased margin
+            colorScheme="orange"
+            isLoading={isStreaming}
+            loadingText="Sending..."
+            size="lg" // Larger button
+          >
+            Send
+          </Button>
         </Flex>
       </Box>
     </Box>
